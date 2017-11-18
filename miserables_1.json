@@ -1,0 +1,29 @@
+{
+  "nodes": [
+    {"id": "victim", "group": 1},
+    {"id": "legit", "group": 2},
+    {"id": "attacker1", "group": 3},
+    {"id": "attacker2", "group": 3},
+    {"id": "attacker3", "group": 3},
+    {"id": "attacker4", "group": 3},
+    {"id": "attacker5", "group": 3},
+    {"id": "attacker6", "group": 3},
+    {"id": "attacker7", "group": 3},
+    {"id": "attacker8", "group": 3},
+    {"id": "attacker9", "group": 3},
+    {"id": "attacker10", "group": 3}
+  ],
+  "links": [
+    {"source": "attacker1", "target": "victim", "value": 1},
+    {"source": "attacker2", "target": "victim", "value": 1},
+    {"source": "attacker3", "target": "victim", "value": 1},
+    {"source": "attacker4", "target": "victim", "value": 1},
+    {"source": "attacker5", "target": "victim", "value": 1},
+    {"source": "attacker6", "target": "victim", "value": 1},
+    {"source": "attacker7", "target": "victim", "value": 1},
+    {"source": "attacker8", "target": "victim", "value": 1},
+    {"source": "attacker9", "target": "victim", "value": 1},
+    {"source": "attacker10", "target": "victim", "value": 1},
+    {"source": "legit", "target": "victim", "value": 10}
+  ]
+}
