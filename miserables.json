@@ -1,5 +1,6 @@
 {
   "nodes": [
+    {"id": "Victim", "group": 9},
     {"id": "Myriel", "group": 1},
     {"id": "Napoleon", "group": 1},
     {"id": "Mlle.Baptistine", "group": 1},
@@ -332,6 +333,20 @@
     {"source": "Mme.Hucheloup", "target": "Bahorel", "value": 1},
     {"source": "Mme.Hucheloup", "target": "Courfeyrac", "value": 1},
     {"source": "Mme.Hucheloup", "target": "Gavroche", "value": 1},
-    {"source": "Mme.Hucheloup", "target": "Enjolras", "value": 1}
+    {"source": "Mme.Hucheloup", "target": "Enjolras", "value": 1},
+
+    {"source": "Mme.Hucheloup", "target": "Victim", "value": 1},
+    {"source": "Myriel", "target": "Victim", "value": 10},
+    {"source": "Brujon", "target": "Victim", "value": 10},
+    {"source": "Child2", "target": "Victim", "value": 10},
+    {"source": "Child1", "target": "Victim", "value": 10},
+    {"source": "Toussaint", "target": "Victim", "value": 10},
+    {"source": "Montparnasse", "target": "Victim", "value": 10},
+    {"source": "Claquesous", "target": "Victim", "value": 10},
+    {"source": "Babet", "target": "Victim", "value": 10},
+    {"source": "Gueulemer", "target": "Victim", "value": 10},
+    {"source": "Grantaire", "target": "Victim", "value": 10},
+    {"source": "Joly", "target": "Victim", "value": 10},
+    {"source": "Courfeyrac", "target": "Victim", "value": 10}
   ]
 }

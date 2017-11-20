@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<meta http-equiv="cache-control" content="no-cache"> 
+<meta http-equiv="expires" content="0"> 
+<meta http-equiv="pragma" content="no-cache">
 <style>
 
 .links line {
@@ -10,6 +13,19 @@
 .nodes circle {
   stroke: #fff;
   stroke-width: 1.5px;
+}
+
+div.tooltip {	
+    position: absolute;			
+    text-align: center;			
+    width: 100px;					
+    height: 16px;					
+    padding: 2px;				
+    font: 12px sans-serif;		
+    background: lightsteelblue;	
+    border: 0px;		
+    border-radius: 8px;			
+    pointer-events: none;			
 }
 
 </style>
@@ -28,31 +44,51 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
+// Define the div for the tooltip
+var div = d3.select("body")
+    .append("div")	
+    .attr("class", "tooltip")				
+    .style("opacity", 0);
+
 d3.json("miserables.json", function(error, graph) {
   if (error) throw error;
 
   var link = svg.append("g")
-      .attr("class", "links")
-      .selectAll("line")
-      .data(graph.links)
-      .enter().append("line")
-      .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+        .attr("class", "links")
+        .selectAll("line")
+        .data(graph.links)
+        .enter().append("line")
+        .attr("stroke-width", function(d) {
+            if (d.target == "Victim") {
+                return Math.sqrt(30);
+            }
+            return Math.sqrt(d.value); 
+        })
+        .style("stroke", function(d) {
+            if (d.target == "Victim") {
+                return "red";
+            }
+            return "gray";
+        });
 
   var node = svg.append("g")
       .attr("class", "nodes")
       .selectAll("circle")
       .data(graph.nodes)
       .enter().append("circle")
-      .attr("r", 5)
+      .attr("r", function(d) {
+          if (d.id == "Victim") {
+              return 20;
+          }
+          return 5;
+      })
       .attr("fill", function(d) { return color(d.group); })
       .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended))
-      .on("mouseover", mouseoverDisplay);
-
-  node.append("title")
-      .text(function(d) { return d.id; });
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+      .on("mouseover", mouseoverDisplay)
+      .on("mouseout", mouseout);
 
   simulation
       .nodes(graph.nodes)
@@ -74,6 +110,20 @@ d3.json("miserables.json", function(error, graph) {
   }
 });
 
+// run a timer to add one node every two seconds
+var secs = 0;
+var timerId = setInterval(function() {
+    secs++;
+    if (secs >= 2) {
+        clearInterval(timerId);
+        // addNode();
+    }
+ }, 1000);
+
+function addNewNode() {
+    d3.select
+}
+
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d.fx = d.x;
@@ -92,9 +142,18 @@ function dragended(d) {
 }
 
 function mouseoverDisplay(d, i) {
-    console.log(d, i);
-    console.log(this);
-    d3.select(this).append("text").text( d.id);
+    div.transition()		
+    .duration(200)		
+    .style("opacity", .9);		
+    div.html(d.id)	
+    .style("left", (d3.event.pageX) + "px")		
+    .style("top", (d3.event.pageY - 28) + "px");
+}
+
+function mouseout(d, i) {
+    div.transition()		
+    .duration(500)		
+    .style("opacity", 0);
 }
 
 </script>
