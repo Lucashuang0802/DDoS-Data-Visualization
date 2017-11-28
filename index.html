@@ -33,7 +33,7 @@ div.tooltip {
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
 
-var svg = d3.select("svg"),
+var svg = d3.select("svg").on("mousedown", addNewNode),
     width = +svg.attr("width"),
     height = +svg.attr("height");
 
@@ -44,6 +44,11 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody())
     .force("center", d3.forceCenter(width / 2, height / 2));
 
+var nodes = simulation.nodes
+    links = simulation.links;
+
+const legitUsers = ["Legit-User1", "Legit-User2", "Legit-User3"];
+
 // Define the div for the tooltip
 var div = d3.select("body")
     .append("div")	
@@ -52,7 +57,6 @@ var div = d3.select("body")
 
 d3.json("miserables.json", function(error, graph) {
   if (error) throw error;
-
   var link = svg.append("g")
         .attr("class", "links")
         .selectAll("line")
@@ -65,6 +69,10 @@ d3.json("miserables.json", function(error, graph) {
             return Math.sqrt(d.value); 
         })
         .style("stroke", function(d) {
+            if (legitUsers.includes(d.source)) {
+                return "yellow"
+            }
+
             if (d.target == "Victim") {
                 return "red";
             }
@@ -79,6 +87,10 @@ d3.json("miserables.json", function(error, graph) {
       .attr("r", function(d) {
           if (d.id == "Victim") {
               return 20;
+          }
+          
+          if (legitUsers.includes(d.id)) {
+              return 10;
           }
           return 5;
       })
@@ -95,7 +107,15 @@ d3.json("miserables.json", function(error, graph) {
       .on("tick", ticked);
 
   simulation.force("link")
-      .links(graph.links);
+      .links(graph.links)
+      .distance(function(d) {
+        if (legitUsers.includes(d.source.id)){
+            return 200;
+        } 
+        else {
+            return 50;
+        }
+    });
 
   function ticked() {
     link
@@ -121,7 +141,20 @@ var timerId = setInterval(function() {
  }, 1000);
 
 function addNewNode() {
-    d3.select
+    console.log("addNewNode");
+    let randomId = makeid();
+    let groupId = Math.floor(Math.random() * 8) + 1; // random select a number from 1-8
+    
+    debugger;
+    var nodes = d3.graph.nodes;
+    var links = d3.graph.nodes;
+    nodes.push({"id": randomId, "group": groupId});
+    links.push({"source": randomId, "target": "Victim", "value": 10});
+    restart();
+}
+
+function addNewLink() {
+
 }
 
 function dragstarted(d) {
@@ -154,6 +187,16 @@ function mouseout(d, i) {
     div.transition()		
     .duration(500)		
     .style("opacity", 0);
+}
+
+function makeid() {
+  var text = "";
+  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+  for (var i = 0; i < 5; i++)
+    text += possible.charAt(Math.floor(Math.random() * possible.length));
+
+  return text;
 }
 
 </script>
